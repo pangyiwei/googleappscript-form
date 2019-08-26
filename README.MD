@@ -14,4 +14,8 @@ Google drive is used as a backend storage while Google Sheets is used as a struc
 5. Publish and Deploy as web app
 6. You are good to go. Responses will appear in the responses sheet.
 
+## Credits
+Much reference to https://www.labnol.org/internet/receive-files-in-google-drive/19697/
+Please credit them.
+
 
