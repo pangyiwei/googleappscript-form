@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bicentennial Experience</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <style>
+    .disclaimer {
+      max-width: 480px;
+      color: #646464;
+      margin: 20px auto;
+      padding: 0 16px;
+      text-align: center;
+      font: 400 12px Roboto, Helvetica, Arial, sans-serif
+    }
+
+    .disclaimer a {
+      color: #009688
+    }
+  </style>
+</head>
+
+<body>
+  <div style="height:100vh; overflow-y:auto">
+    <form class="main" id="form" novalidate="novalidate"
+      style="max-width: 480px; padding-left:10px; padding-right:12px; margin: 40px auto; overflow-y:auto">
+      <div id="forminner">
+        <div class="row">
+          <div class="col s12">
+            <h5 class="center-align teal-text" id='title'>EIT@BicentennialSG Quiz</h5>
+          </div>
+        </div>
+
+        <div id="qnArea">
+        </div>
+
+        <div class="row">
+          <h5>
+            About you.
+          </h5>
+        </div>
+
+        <div class="row">
+          <div>Please enter your <strong>name</strong>.</div>
+          <div class="input-field col s12">
+            <input id="name" type="text" name="Name" class="validate qn" required>
+            <label for="name">Name</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <h5>
+            Path Finder Tasks and Questions.
+          </h5>
+        </div>
+
+
+        <div class="row">
+          <div>1. <strong>[Emporium of the East]</strong> Find the <strong>Augmented Reality Bird</strong> and
+            submit a picture of yourself with it. Use the BicentennialSG AR Web Application and your phone's
+            screenshot functionality to achieve this. Please see below for an example</div>
+          <div>[Sample Image here]</div>
+          <div class="file-field input-field col s12">
+            <div class="btn ">
+              <span>File</span>
+              <input id="files" type="file" class="qn" required>
+            </div>
+            <div class="file-path-wrapper">
+              <input class="file-path validate" type="text" placeholder="Select a file on your computer">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>2. <strong>[House of Maps]</strong> Singapore has a different name on the Ortelius' Theatrum Orbis
+            Terrarum atlas. Find Singapore and enter its name below.</div>
+          <div class="input-field col s12">
+            <input id="qn2Ans" type="text" class="qn validate" required>
+            <label for="qn2Ans">Singapore's other name</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>3. <strong>[Seed Conservatory]</strong> One of these plant species appears in our currency. Which
+            plant species is this?</div>
+          <div class="input-field col s12">
+            <input id="qn3Ans" type="text" class="qn validate" required>
+            <label for="qn3Ans">Plant Species</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>4. <strong>[Observatory]</strong> In the century that Galileo Galilei published his support for the
+            theory of a solar-centric universe, what significant event happened in Singapore?</div>
+          <div class="input-field col s12">
+            <textarea id="qn4Ans" class="materialize-textarea qn"></textarea>
+            <label for="qn4Ans">Significant Event</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>5. <strong>[Reflections of Our Past]</strong> Capture a moment of yourself reflecting on
+            Singapore's rich history and share it with us.</div>
+          <div class="file-field input-field col s12">
+            <div class="btn ">
+              <span>File</span>
+              <input id="files" type="file" class="qn" required>
+            </div>
+            <div class="file-path-wrapper">
+              <input class="file-path validate" type="text" placeholder="Select a file on your computer">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s12">
+            <button class="waves-effect waves-light btn submit-btn col s12 " type="submit"
+              onclick="submitForm(); return false;">Submit</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s12" id="progress">
+          </div>
+        </div>
+
+      </div>
+
+      <div id="success" style="display:none">
+        <h5 class="left-align -text">Submitted</h5>
+        <p>Your response has been recorded.</p>
+        <p>Winners will be informed by email</p>
+        <p class="center-align"><a class="btn btn-large btn-full " onclick='reloadPage()' target="_blank">Submit
+            Another Response</a></p>
+      </div>
+
+    </form>
+  </div>
+  <div id="load"
+    style="position:absolute; left:0; top:0; display:none; width:100vw; height:100vh; background-color:#fff; opacity:0.5;">
+    <div style="position:relative; display:flex; height:100%; align-items:center; justify-content:center">
+      <div class="preloader-wrapper big active">
+        <div class="spinner-layer spinner-teal-only">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div>
+          <div class="gap-patch">
+            <div class="circle"></div>
+          </div>
+          <div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+  <script>
+
+  // Update Title
+  google.script.run
+    .withSuccessHandler((title) => {
+      $('#title').text(title);
+    })
+    .getTitle();
+
+  // Update Questions
+  google.script.run
+  .withSuccessHandler((e) => {
+      console.log(e);
+      for (i=0; i<e.length; i++) {
+        var formElement = e[i];
+        var toAppend;
+
+        if (formElement.type === 'file') {
+          toAppend = `
+            <div class='row'>
+              <div>${formElement.type=='heading'?'':formElement.id.split('-')[1] + '. ' + formElement.text}</div>
+              <div class="file-field input-field col s12">
+                <div class="btn ">
+                  <span>File</span>
+                  <input id='${formElement.id}' type="file" class="qn" ${formElement.required?'required':''}>
+                </div>
+                <div class="file-path-wrapper">
+                  <input class="file-path ${formElement.required?'validate':''}" type="text" placeholder="Select a file on your computer">
+                </div>
+              </div>
+            </div>
+          `
+        } else if (formElement.type === 'heading') {
+          toAppend = `
+            <div class="row">
+              <h5>
+                ${formElement.text}
+              </h5>
+            </div>
+          `
+        } else if (formElement.type === 'longAns') {
+          toAppend = `
+            <div class="row">
+              <div>${formElement.type=='heading'?'':formElement.id.split('-')[1] + '. ' + formElement.text}</div>
+              <div class="input-field col s12">
+                <textarea id='${formElement.id}' class="materialize-textarea qn ${formElement.required?'validate':''}" ${formElement.required?'required':''}></textarea>
+                <label for='${formElement.id}'>${formElement.label}</label>
+              </div>
+            </div>
+          `
+        } else {
+          toAppend = `
+            <div class="row">
+              <div>${formElement.type=='heading'?'':formElement.id.split('-')[1] + '. ' + formElement.text}</div>
+              <div class="input-field col s12">
+                <input id='${formElement.id}' type="text" class="qn ${formElement.required?'validate':''}" ${formElement.required?'required':''}>
+                <label for='${formElement.id}'>${formElement.label}</label>
+              </div>
+            </div>
+          `
+        }
+
+        $('#qnArea').append(toAppend);
+      }
+    })
+    .getQuestions();
+
+
+    function submitForm() {
+
+      const answerElements = $('.qn');
+      const answersPromiseArr = [];
+      
+      $('#load').show();
+
+      for (var i = 0; i < answerElements.length; i++) {
+
+        if (answerElements[i].type == 'file') {
+          // handle file submit
+          // console.log('file upload');
+          var files = answerElements[i].files;
+
+          if (files.length === 0) {
+            showError("Please select a file for question " + (i) + " to upload");
+            return;
+          }
+
+          if (files.length > 1) {
+            showError("Please only choose one file for question " + (i));
+            return;
+          }
+
+          file = files[0];
+
+          if (file.size > 1024 * 1024 * 5) {
+            showError("File size too large");
+            return;
+          }
+
+          answersPromiseArr[i] = readUploadFileAsDataURL(file)
+            .then(result => {
+              return new Promise((resolve, reject) => {
+                google.script.run
+                  .withSuccessHandler(function(e) {
+                    // console.log(e);
+                    resolve(e);
+                  })
+                  .withFailureHandler(function(e) {
+                    // console.log(e);
+                    reject(e);
+                  })
+                  .uploadFileToGoogleDrive(result, file.name);
+              });
+            });
+
+        } else {
+          // handle text submit
+          //console.log('normal text submit');
+          //console.log(answerElements[i].id);
+          answersPromiseArr[i] = new Promise ((resolve, reject) => {
+            resolve($('#'+answerElements[i].id).val());
+          });
+        }
+      }
+
+      Promise.all(answersPromiseArr)
+        .then(answers => {
+          //console.log(answers);
+          google.script.run
+            .withSuccessHandler((e) => {
+              //console.log(e);
+              $('#load').hide();
+              if (e === "OK") {
+                $('#forminner').hide();
+                $('#success').show();
+              } else {
+                showError(e);
+              }
+            })
+            .updateSheet(answers);
+        })
+        .catch(err => {
+          // console.log(err);
+          showError(err);
+        });
+    }
+
+    function showError(e) {
+      $('#progress').addClass('red-text').html(e);
+    }
+
+    function showMessage(e) {
+      $('#progress').removeClass('red-text').html(e);
+    }
+
+    function reloadPage() {
+      var answerElements = $(':input');
+      // console.log(answerElements);
+      answerElements.val('');
+      $('#forminner').show();
+      $('#success').hide();
+    }
+
+    function readUploadFileAsDataURL(file) {
+      var temporaryFileReader = new FileReader();
+      return new Promise((resolve, reject) => {
+        temporaryFileReader.onerror = () => {
+          temporaryFileReader.abort();
+          reject(new DOMException("Problem parsing input file."));
+        };
+
+        temporaryFileReader.onload = () => {
+          resolve(temporaryFileReader.result);
+        };
+        temporaryFileReader.readAsDataURL(file);
+      });
+    }
+
+
+  </script>
+
+</body>
+
+</html>
