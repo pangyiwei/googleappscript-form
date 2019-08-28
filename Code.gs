@@ -4,10 +4,15 @@ function doGet(e) {
   return HtmlService.createHtmlOutputFromFile('index.html').setTitle(title).addMetaTag("viewport", "width=device-width, initial-scale=1");
 }
 
-function getTitle() {
+function getMeta() {
   var metaSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Meta');
-  var title = metaSheet.getRange("B1").getCell(1,1).getValue();
-  return title;
+  var lastRow = metaSheet.getLastRow();
+  var metaData = metaSheet.getRange("B1:B2");
+  var result = {
+    title: metaData.getCell(1,1).getValue(),
+    submitText: metaData.getCell(2,1).getValue()
+  }
+  return result;
 }
 
 function getQuestions() {

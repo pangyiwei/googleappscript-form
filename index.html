@@ -52,8 +52,7 @@
 
       <div id="success" style="display:none">
         <h5 class="left-align -text">Submitted</h5>
-        <p>Your response has been recorded.</p>
-        <p>Winners will be informed by email</p>
+        <div id="submitText"></div>
         <p class="center-align"><a class="btn btn-large btn-full " onclick='reloadPage()' target="_blank">Submit
             Another Response</a></p>
       </div>
@@ -88,15 +87,16 @@
 
     // Update Title
     google.script.run
-      .withSuccessHandler((title) => {
-        $('#title').text(title);
+      .withSuccessHandler((result) => {
+        $('#title').text(result.title);
+        $('#submitText').html(result.submitText);
       })
-      .getTitle();
+      .getMeta();
 
     // Update Questions
     google.script.run
       .withSuccessHandler((e) => {
-        console.log(e);
+        // console.log(e);
         for (i = 0; i < e.length; i++) {
           var formElement = e[i];
           var toAppend;
